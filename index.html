@@ -5,6 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#f8e5df">
+<meta name="description" content="ZARA HUELLA: una fragancia, una historia y una memoria digital para conservar lo que sentimos.">
 <title>ZARA HUELLA | Tu memoria digital</title>
 
 <style>
@@ -13,29 +14,31 @@
   --rosa-claro: #fff8f5;
   --dorado: #b89555;
   --texto: #493b37;
+  --panel: rgba(255, 250, 247, .94);
 }
 
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
 
 body {
   margin: 0;
-  background: var(--rosa-claro);
   color: var(--texto);
-  font-family: Georgia, serif;
+  font-family: Georgia, "Times New Roman", serif;
+  background: #f8e5df url("fondo-zara-huella.png") center top / 100% auto no-repeat fixed;
 }
 
 header {
   text-align: center;
-  padding: 35px 18px 25px;
-  background: linear-gradient(145deg,#f4d8d2,#fff5ef);
+  padding: 28px 18px 20px;
+  background: rgba(255, 247, 243, .94);
+  border-bottom: 1px solid rgba(184,149,85,.55);
 }
 
 .marca {
-  font-size: 32px;
+  font-size: clamp(27px, 5vw, 36px);
   letter-spacing: 8px;
-  margin: 10px 0;
+  margin: 7px 0;
 }
 
 .submarca {
@@ -45,17 +48,29 @@ header {
 
 .flor {
   color: var(--dorado);
-  font-size: 27px;
+  font-size: 25px;
+}
+
+header p {
+  margin: 10px 0 0;
+  letter-spacing: 4px;
+  font-size: 12px;
 }
 
 main {
-  width: min(680px, 92%);
+  width: min(720px, 92%);
   margin: auto;
+  padding: 12px 0 25px;
 }
 
 .hero {
   text-align: center;
-  padding: 35px 15px;
+  padding: 32px 18px 28px;
+  margin: 18px 0;
+  background: var(--panel);
+  border: 1px solid rgba(184,149,85,.55);
+  border-radius: 18px;
+  box-shadow: 0 8px 28px rgba(100,65,45,.08);
 }
 
 h1 {
@@ -65,19 +80,18 @@ h1 {
 }
 
 h2 {
-  color: var(--dorado);
+  color: #a78349;
   font-size: 23px;
   font-weight: normal;
+  margin: 10px 0;
 }
 
-p {
-  line-height: 1.7;
-}
+p { line-height: 1.7; }
 
 .huella {
-  width: 105px;
-  height: 105px;
-  margin: 12px auto 20px;
+  width: 96px;
+  height: 96px;
+  margin: 8px auto 16px;
 }
 
 .huella svg {
@@ -86,23 +100,25 @@ p {
 }
 
 .intro {
-  max-width: 470px;
+  max-width: 490px;
   margin: auto;
   font-style: italic;
 }
 
 .card {
-  background: white;
-  border: 1px solid #ead5c0;
+  background: var(--panel);
+  border: 1px solid #d9bd8b;
   border-radius: 17px;
-  padding: 23px;
+  padding: 22px;
   margin: 17px 0;
   text-align: center;
-  box-shadow: 0 5px 20px #b8955514;
+  box-shadow: 0 7px 24px rgba(100,65,45,.08);
+  backdrop-filter: blur(3px);
 }
 
 .icono {
-  font-size: 35px;
+  font-size: 32px;
+  color: var(--dorado);
 }
 
 button {
@@ -117,37 +133,32 @@ button {
   margin: 7px;
 }
 
-button:hover {
-  background: var(--rosa);
-}
+button:hover { background: var(--rosa); }
 
 button:focus-visible {
   outline: 3px solid var(--dorado);
+  outline-offset: 3px;
 }
 
 .media {
   width: 100%;
-  max-height: 340px;
+  max-height: 380px;
   border-radius: 12px;
   display: block;
   margin: 15px auto;
-  object-fit: cover;
+  object-fit: contain;
+  background: #f8e5df;
 }
 
 .placeholder {
   background: linear-gradient(135deg,#f4d8d2,#fff8f0,#ead8b9);
+  border: 1px solid rgba(184,149,85,.4);
   border-radius: 12px;
   min-height: 180px;
   display: grid;
   place-items: center;
-  font-size: 55px;
+  font-size: 48px;
   margin: 15px 0;
-  animation: brillo 4s ease-in-out infinite alternate;
-}
-
-@keyframes brillo {
-  from { filter: brightness(.96); }
-  to { filter: brightness(1.08); }
 }
 
 .mensaje {
@@ -157,18 +168,42 @@ button:focus-visible {
   color: #6e5547;
 }
 
-footer {
-  text-align: center;
-  padding: 30px 15px;
-  color: #8d765d;
-  font-size: 13px;
-}
-
 .linea {
   width: 90px;
   height: 1px;
   background: var(--dorado);
   margin: 20px auto;
+}
+
+footer {
+  text-align: center;
+  padding: 26px 15px 32px;
+  color: #765f4a;
+  font-size: 13px;
+  background: rgba(255,247,243,.9);
+  border-top: 1px solid rgba(184,149,85,.45);
+}
+
+small { color: #806d5d; }
+
+[hidden] { display: none !important; }
+
+@media (max-width: 600px) {
+  body {
+    background-size: auto 100vh;
+    background-attachment: scroll;
+    background-position: center top;
+  }
+
+  header { padding: 22px 12px 17px; }
+  .marca { letter-spacing: 6px; }
+  .submarca { letter-spacing: 5px; }
+  .card { padding: 19px 15px; }
+  .hero { padding: 26px 14px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
 }
 </style>
 </head>
@@ -176,7 +211,7 @@ footer {
 <body>
 
 <header>
-  <div class="flor">✿</div>
+  <div class="flor" aria-hidden="true">✿</div>
   <div class="marca">ZARA</div>
   <div class="submarca">H U E L L A</div>
   <p><i>EAU DE PARFUM</i></p>
@@ -185,18 +220,15 @@ footer {
 <main>
 
 <section class="hero">
-
   <div class="huella">
-    <svg viewBox="0 0 120 120" aria-label="Huella en forma de corazón">
+    <svg viewBox="0 0 120 120" role="img" aria-label="Huella en forma de corazón">
       <defs>
         <clipPath id="corazon">
           <path d="M60 104 C49 91 12 65 12 38 C12 10 47 5 60 31 C73 5 108 10 108 38 C108 65 71 91 60 104Z"/>
         </clipPath>
       </defs>
 
-      <g clip-path="url(#corazon)" fill="none"
-         stroke="#b89555" stroke-width="2.2"
-         stroke-linecap="round">
+      <g clip-path="url(#corazon)" fill="none" stroke="#b89555" stroke-width="2.2" stroke-linecap="round">
         <path d="M-5 23 Q60 0 125 23"/>
         <path d="M-5 34 Q60 11 125 34"/>
         <path d="M-5 45 Q60 22 125 45"/>
@@ -216,143 +248,121 @@ footer {
   <h2>Una huella que permanece.</h2>
 
   <p class="intro">
-    Hay momentos que pasan, emociones que nos transforman
-    y recuerdos que merecen vivir para siempre.
+    Hay momentos que pasan, emociones que nos transforman y recuerdos que merecen vivir para siempre.
   </p>
 
   <div class="linea"></div>
   <p>Bienvenido/a a tu memoria digital.</p>
-
 </section>
 
 <section class="card" id="voz">
-
-  <div class="icono">♫</div>
+  <div class="icono" aria-hidden="true">♫</div>
   <h2>Una voz que permanece</h2>
-
   <p>Porque algunas palabras merecen volver a escucharse.</p>
 
-  <button onclick="escucharVoz()">
-    ▶ Escuchar mensaje
-  </button>
+  <button type="button" id="btnEscuchar">▶ Escuchar mensaje</button>
+  <button type="button" id="btnDetener">■ Detener</button>
 
-  <button onclick="detenerVoz()">
-    ■ Detener
-  </button>
-  <audio id="vozReal" src="voz.mp3" preload="auto"></audio>
+  <audio id="vozReal" src="voz.mp3" preload="metadata"></audio>
 
   <p><small>Una voz, una emoción, un recuerdo.</small></p>
-
+  <p id="estadoAudio" role="status" aria-live="polite"></p>
 </section>
 
 <section class="card" id="video">
-
-  <div class="icono">♡</div>
+  <div class="icono" aria-hidden="true">♡</div>
   <h2>Un recuerdo en movimiento</h2>
-
   <p>Los instantes especiales también pueden volver a sentirse.</p>
 
-  <div class="placeholder" id="videoDemo">✿ ♡ ✿</div>
+  <div class="placeholder" id="videoDemo" aria-label="Video próximamente">
+    ✿ ♡ ✿
+  </div>
 
-  <video id="videoReal" class="media"
-         controls playsinline hidden>
+  <video id="videoReal" class="media" controls playsinline preload="metadata" hidden>
     <source src="recuerdo.mp4" type="video/mp4">
+    Tu navegador no puede reproducir este video.
   </video>
 
-  <p><small>Espacio reservado para nuestro video especial.</small></p>
-
+  <p><small id="textoVideo">Espacio reservado para nuestro video especial.</small></p>
 </section>
 
 <section class="card" id="foto">
-
-  <div class="icono">❀</div>
+  <div class="icono" aria-hidden="true">❀</div>
   <h2>Momentos para conservar</h2>
-
   <p>Una imagen puede guardar una historia entera.</p>
 
-  <div class="placeholder" id="fotoDemo">🌸</div>
+  <div class="placeholder" id="fotoDemo" aria-label="Imagen de recuerdo">🌸</div>
 
-  <img id="fotoReal" class="media"
-       src="recuerdo.jpg"
-       alt="Un recuerdo especial" hidden>
+  <img id="fotoReal" class="media" src="recuerdo.jpg" alt="Un recuerdo especial" hidden>
 
-  <p><small>Espacio reservado para una fotografía especial.</small></p>
-
+  <p><small>Una imagen para volver a ese instante.</small></p>
 </section>
 
 <section class="card">
-
-  <div class="icono">♡</div>
+  <div class="icono" aria-hidden="true">♡</div>
   <h2>Una huella para siempre</h2>
 
   <p class="mensaje">
-    "Hay vínculos que se sienten, recuerdos que perduran
-    y personas que dejan huella para siempre."
+    «Hay vínculos que se sienten, recuerdos que perduran y personas que dejan huella para siempre».
   </p>
 
   <div class="linea"></div>
-
   <p>Gracias por formar parte de esta historia.</p>
-
 </section>
 
 </main>
 
 <footer>
-
-  <div class="flor">✿</div>
+  <div class="flor" aria-hidden="true">✿</div>
   ZARA HUELLA · EAU DE PARFUM
-
   <p>Una fragancia, una historia, una huella.</p>
-
 </footer>
 
 <script>
-
-// MENSAJE DE BIENVENIDA CON VOZ
-
-// REPRODUCIR VOZ REAL DE ZARA HUELLA
-
 const audioVoz = document.getElementById("vozReal");
+const estadoAudio = document.getElementById("estadoAudio");
 
-function escucharVoz() {
-  audioVoz.currentTime = 0;
-
-  audioVoz.play().catch(error => {
+document.getElementById("btnEscuchar").addEventListener("click", async () => {
+  try {
+    audioVoz.currentTime = 0;
+    await audioVoz.play();
+    estadoAudio.textContent = "Reproduciendo tu mensaje.";
+  } catch (error) {
     console.error("No se pudo reproducir el audio:", error);
-    alert("No se pudo reproducir la voz. Verificá que voz.mp3 esté subido correctamente.");
-  });
-}
-
-// DETENER LA VOZ
-
-function detenerVoz() {
-  audioVoz.pause();
-  audioVoz.currentTime = 0;
-}
-
-// MOSTRAR VIDEO CUANDO ESTÉ DISPONIBLE
-
-const video = document.getElementById("videoReal");
-
-video.addEventListener("canplay", function() {
-  this.hidden = false;
-  document.getElementById("videoDemo").hidden = true;
+    estadoAudio.textContent = "No se pudo reproducir el audio. Verificá que voz.mp3 esté subido junto a index.html.";
+  }
 });
 
-// MOSTRAR FOTOGRAFÍA CUANDO ESTÉ DISPONIBLE
+document.getElementById("btnDetener").addEventListener("click", () => {
+  audioVoz.pause();
+  audioVoz.currentTime = 0;
+  estadoAudio.textContent = "Mensaje detenido.";
+});
+
+const video = document.getElementById("videoReal");
+const videoDemo = document.getElementById("videoDemo");
+
+video.addEventListener("loadedmetadata", () => {
+  video.hidden = false;
+  videoDemo.hidden = true;
+});
+
+video.addEventListener("error", () => {
+  video.hidden = true;
+  videoDemo.hidden = false;
+});
 
 const foto = document.getElementById("fotoReal");
 
-foto.addEventListener("load", function() {
-  this.hidden = false;
+foto.addEventListener("load", () => {
+  foto.hidden = false;
   document.getElementById("fotoDemo").hidden = true;
 });
 
-foto.addEventListener("error", function() {
-  this.hidden = true;
+foto.addEventListener("error", () => {
+  foto.hidden = true;
+  document.getElementById("fotoDemo").hidden = false;
 });
-
 </script>
 
 </body>
