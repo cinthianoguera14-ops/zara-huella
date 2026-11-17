@@ -239,6 +239,7 @@ footer {
   <button onclick="detenerVoz()">
     ■ Detener
   </button>
+  <audio id="vozReal" src="voz.mp3" preload="auto"></audio>
 
   <p><small>Una voz, una emoción, un recuerdo.</small></p>
 
@@ -310,56 +311,24 @@ footer {
 
 // MENSAJE DE BIENVENIDA CON VOZ
 
+// REPRODUCIR VOZ REAL DE ZARA HUELLA
+
+const audioVoz = document.getElementById("vozReal");
+
 function escucharVoz() {
+  audioVoz.currentTime = 0;
 
-  if (!("speechSynthesis" in window)) {
-    alert("Tu navegador no admite reproducción de voz.");
-    return;
-  }
-
-  window.speechSynthesis.cancel();
-
-  const texto =
-    "Hola, qué lindo que estés acá. " +
-    "Esto es Zara Huella, un espacio donde los recuerdos " +
-    "encuentran una forma de permanecer. " +
-    "Porque hay personas que nos marcan, momentos que nos emocionan " +
-    "y palabras que nunca queremos olvidar. " +
-    "Una fragancia puede acompañarte por un instante, " +
-    "pero una huella puede quedarse para siempre. " +
-    "Zara Huella. Una fragancia, una historia, " +
-    "una huella que permanece.";
-
-  const mensaje = new SpeechSynthesisUtterance(texto);
-
-  mensaje.lang = "es-AR";
-  mensaje.rate = 0.90;
-  mensaje.pitch = 1.08;
-  mensaje.volume = 1;
-
-  const voces = window.speechSynthesis.getVoices();
-
-  const vozArgentina = voces.find(
-    voz => voz.lang.toLowerCase() === "es-ar"
-  );
-
-  const vozEspanol = voces.find(
-    voz => voz.lang.toLowerCase().startsWith("es")
-  );
-
-  if (vozArgentina) {
-    mensaje.voice = vozArgentina;
-  } else if (vozEspanol) {
-    mensaje.voice = vozEspanol;
-  }
-
-  window.speechSynthesis.speak(mensaje);
+  audioVoz.play().catch(error => {
+    console.error("No se pudo reproducir el audio:", error);
+    alert("No se pudo reproducir la voz. Verificá que voz.mp3 esté subido correctamente.");
+  });
 }
 
 // DETENER LA VOZ
 
 function detenerVoz() {
-  window.speechSynthesis.cancel();
+  audioVoz.pause();
+  audioVoz.currentTime = 0;
 }
 
 // MOSTRAR VIDEO CUANDO ESTÉ DISPONIBLE
