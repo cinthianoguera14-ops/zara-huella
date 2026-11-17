@@ -249,11 +249,34 @@ function escucharVoz() {
   audio.play().catch(hablar);
 }
 
+
 function hablar() {
   if (!("speechSynthesis" in window)) {
     alert("Este navegador no admite reproducción de voz.");
     return;
   }
+
+  speechSynthesis.cancel();
+
+  const mensaje = new SpeechSynthesisUtterance(
+    "Hola, qué lindo que estés acá. Esto es Zara Huella, un espacio donde los recuerdos encuentran una forma de permanecer. Porque hay personas que nos marcan, momentos que nos emocionan y palabras que nunca queremos olvidar. Una fragancia puede acompañarte por un instante, pero una huella puede quedarse para siempre. Zara Huella. Una fragancia, una historia, una huella que permanece."
+  );
+
+  mensaje.lang = "es-AR";
+  mensaje.rate = 0.88;
+  mensaje.pitch = 1.08;
+
+  const voces = speechSynthesis.getVoices();
+  const vozArgentina = voces.find(
+    voz => voz.lang.toLowerCase() === "es-ar"
+  );
+
+  if (vozArgentina) {
+    mensaje.voice = vozArgentina;
+  }
+
+  speechSynthesis.speak(mensaje);
+}
 
   speechSynthesis.cancel();
   const mensaje = new SpeechSynthesisUtterance(
