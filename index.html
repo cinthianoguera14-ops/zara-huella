@@ -14,66 +14,83 @@
   --dorado: #b89555;
   --texto: #493b37;
 }
-* { box-sizing: border-box; }
+
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   background: var(--rosa-claro);
   color: var(--texto);
   font-family: Georgia, serif;
 }
+
 header {
   text-align: center;
   padding: 35px 18px 25px;
   background: linear-gradient(145deg,#f4d8d2,#fff5ef);
 }
+
 .marca {
   font-size: 32px;
   letter-spacing: 8px;
   margin: 10px 0;
 }
+
 .submarca {
   letter-spacing: 7px;
   font-size: 13px;
 }
+
 .flor {
   color: var(--dorado);
   font-size: 27px;
 }
+
 main {
   width: min(680px, 92%);
   margin: auto;
 }
+
 .hero {
   text-align: center;
   padding: 35px 15px;
 }
+
 h1 {
   font-size: clamp(27px,6vw,39px);
   font-weight: normal;
   margin: 8px 0;
 }
+
 h2 {
   color: var(--dorado);
   font-size: 23px;
   font-weight: normal;
 }
+
 p {
   line-height: 1.7;
 }
+
 .huella {
   width: 105px;
   height: 105px;
   margin: 12px auto 20px;
 }
+
 .huella svg {
   width: 100%;
   height: 100%;
 }
+
 .intro {
   max-width: 470px;
   margin: auto;
   font-style: italic;
 }
+
 .card {
   background: white;
   border: 1px solid #ead5c0;
@@ -83,9 +100,11 @@ p {
   text-align: center;
   box-shadow: 0 5px 20px #b8955514;
 }
+
 .icono {
   font-size: 35px;
 }
+
 button {
   border: 1px solid var(--dorado);
   background: #fffaf7;
@@ -97,12 +116,15 @@ button {
   cursor: pointer;
   margin: 7px;
 }
+
 button:hover {
   background: var(--rosa);
 }
+
 button:focus-visible {
   outline: 3px solid var(--dorado);
 }
+
 .media {
   width: 100%;
   max-height: 340px;
@@ -111,6 +133,7 @@ button:focus-visible {
   margin: 15px auto;
   object-fit: cover;
 }
+
 .placeholder {
   background: linear-gradient(135deg,#f4d8d2,#fff8f0,#ead8b9);
   border-radius: 12px;
@@ -121,22 +144,26 @@ button:focus-visible {
   margin: 15px 0;
   animation: brillo 4s ease-in-out infinite alternate;
 }
+
 @keyframes brillo {
   from { filter: brightness(.96); }
   to { filter: brightness(1.08); }
 }
+
 .mensaje {
   font-size: 19px;
   font-style: italic;
   line-height: 1.8;
   color: #6e5547;
 }
+
 footer {
   text-align: center;
   padding: 30px 15px;
   color: #8d765d;
   font-size: 13px;
 }
+
 .linea {
   width: 90px;
   height: 1px;
@@ -147,6 +174,7 @@ footer {
 </head>
 
 <body>
+
 <header>
   <div class="flor">✿</div>
   <div class="marca">ZARA</div>
@@ -155,182 +183,208 @@ footer {
 </header>
 
 <main>
-  <section class="hero">
-    <div class="huella">
-      <svg viewBox="0 0 120 120" aria-label="Huella en forma de corazón">
-        <defs>
-          <clipPath id="corazon">
-            <path d="M60 104 C49 91 12 65 12 38 C12 10 47 5 60 31 C73 5 108 10 108 38 C108 65 71 91 60 104Z"/>
-          </clipPath>
-        </defs>
-        <g clip-path="url(#corazon)" fill="none" stroke="#b89555" stroke-width="2.2" stroke-linecap="round">
-          <path d="M-5 23 Q60 0 125 23"/>
-          <path d="M-5 34 Q60 11 125 34"/>
-          <path d="M-5 45 Q60 22 125 45"/>
-          <path d="M-5 56 Q60 33 125 56"/>
-          <path d="M-5 67 Q60 44 125 67"/>
-          <path d="M-5 78 Q60 55 125 78"/>
-          <path d="M-5 89 Q60 66 125 89"/>
-          <path d="M-5 100 Q60 77 125 100"/>
-        </g>
-        <path d="M60 104 C49 91 12 65 12 38 C12 10 47 5 60 31 C73 5 108 10 108 38 C108 65 71 91 60 104Z"
-          fill="none" stroke="#b89555" stroke-width="2.5"/>
-      </svg>
-    </div>
 
-    <h1>Una fragancia, una historia.</h1>
-    <h2>Una huella que permanece.</h2>
-    <p class="intro">
-      Hay momentos que pasan, emociones que nos transforman
-      y recuerdos que merecen vivir para siempre.
-    </p>
-    <div class="linea"></div>
-    <p>Bienvenido/a a tu memoria digital.</p>
-  </section>
+<section class="hero">
 
-  <section class="card" id="voz">
-    <div class="icono">♫</div>
-    <h2>Una voz que permanece</h2>
-    <p>Porque algunas palabras merecen volver a escucharse.</p>
-    <audio id="audio" src="voz.mp3" preload="none"></audio>
-    <button onclick="escucharVoz()">▶ Escuchar mensaje</button>
-    <button onclick="detenerVoz()">■ Detener</button>
-    <p><small>La voz de esta experiencia te dará la bienvenida.</small></p>
-  </section>
+  <div class="huella">
+    <svg viewBox="0 0 120 120" aria-label="Huella en forma de corazón">
+      <defs>
+        <clipPath id="corazon">
+          <path d="M60 104 C49 91 12 65 12 38 C12 10 47 5 60 31 C73 5 108 10 108 38 C108 65 71 91 60 104Z"/>
+        </clipPath>
+      </defs>
 
-  <section class="card" id="video">
-    <div class="icono">♡</div>
-    <h2>Un recuerdo en movimiento</h2>
-    <p>Los instantes especiales también pueden volver a sentirse.</p>
-    <div class="placeholder" id="videoDemo">✿ ♡ ✿</div>
-    <video id="videoReal" class="media" controls playsinline hidden>
-      <source src="recuerdo.mp4" type="video/mp4">
-    </video>
-    <p><small>Espacio reservado para nuestro video especial.</small></p>
-  </section>
+      <g clip-path="url(#corazon)" fill="none"
+         stroke="#b89555" stroke-width="2.2"
+         stroke-linecap="round">
+        <path d="M-5 23 Q60 0 125 23"/>
+        <path d="M-5 34 Q60 11 125 34"/>
+        <path d="M-5 45 Q60 22 125 45"/>
+        <path d="M-5 56 Q60 33 125 56"/>
+        <path d="M-5 67 Q60 44 125 67"/>
+        <path d="M-5 78 Q60 55 125 78"/>
+        <path d="M-5 89 Q60 66 125 89"/>
+        <path d="M-5 100 Q60 77 125 100"/>
+      </g>
 
-  <section class="card" id="foto">
-    <div class="icono">❀</div>
-    <h2>Momentos para conservar</h2>
-    <p>Una imagen puede guardar una historia entera.</p>
-    <div class="placeholder" id="fotoDemo">🌸</div>
-    <img id="fotoReal" class="media" src="recuerdo.jpg"
-         alt="Un recuerdo especial" hidden>
-    <p><small>Espacio reservado para una fotografía especial.</small></p>
-  </section>
+      <path d="M60 104 C49 91 12 65 12 38 C12 10 47 5 60 31 C73 5 108 10 108 38 C108 65 71 91 60 104Z"
+        fill="none" stroke="#b89555" stroke-width="2.5"/>
+    </svg>
+  </div>
 
-  <section class="card">
-    <div class="icono">♡</div>
-    <h2>Una huella para siempre</h2>
-    <p class="mensaje">
-      "Hay vínculos que se sienten, recuerdos que perduran
-      y personas que dejan huella para siempre."
-    </p>
-    <div class="linea"></div>
-    <p>Gracias por formar parte de esta historia.</p>
-  </section>
+  <h1>Una fragancia, una historia.</h1>
+  <h2>Una huella que permanece.</h2>
+
+  <p class="intro">
+    Hay momentos que pasan, emociones que nos transforman
+    y recuerdos que merecen vivir para siempre.
+  </p>
+
+  <div class="linea"></div>
+  <p>Bienvenido/a a tu memoria digital.</p>
+
+</section>
+
+<section class="card" id="voz">
+
+  <div class="icono">♫</div>
+  <h2>Una voz que permanece</h2>
+
+  <p>Porque algunas palabras merecen volver a escucharse.</p>
+
+  <button onclick="escucharVoz()">
+    ▶ Escuchar mensaje
+  </button>
+
+  <button onclick="detenerVoz()">
+    ■ Detener
+  </button>
+
+  <p><small>Una voz, una emoción, un recuerdo.</small></p>
+
+</section>
+
+<section class="card" id="video">
+
+  <div class="icono">♡</div>
+  <h2>Un recuerdo en movimiento</h2>
+
+  <p>Los instantes especiales también pueden volver a sentirse.</p>
+
+  <div class="placeholder" id="videoDemo">✿ ♡ ✿</div>
+
+  <video id="videoReal" class="media"
+         controls playsinline hidden>
+    <source src="recuerdo.mp4" type="video/mp4">
+  </video>
+
+  <p><small>Espacio reservado para nuestro video especial.</small></p>
+
+</section>
+
+<section class="card" id="foto">
+
+  <div class="icono">❀</div>
+  <h2>Momentos para conservar</h2>
+
+  <p>Una imagen puede guardar una historia entera.</p>
+
+  <div class="placeholder" id="fotoDemo">🌸</div>
+
+  <img id="fotoReal" class="media"
+       src="recuerdo.jpg"
+       alt="Un recuerdo especial" hidden>
+
+  <p><small>Espacio reservado para una fotografía especial.</small></p>
+
+</section>
+
+<section class="card">
+
+  <div class="icono">♡</div>
+  <h2>Una huella para siempre</h2>
+
+  <p class="mensaje">
+    "Hay vínculos que se sienten, recuerdos que perduran
+    y personas que dejan huella para siempre."
+  </p>
+
+  <div class="linea"></div>
+
+  <p>Gracias por formar parte de esta historia.</p>
+
+</section>
+
 </main>
 
 <footer>
+
   <div class="flor">✿</div>
   ZARA HUELLA · EAU DE PARFUM
+
   <p>Una fragancia, una historia, una huella.</p>
+
 </footer>
 
 <script>
 
+// MENSAJE DE BIENVENIDA CON VOZ
+
 function escucharVoz() {
-  const mensaje =
-    "Hola, qué lindo que estés acá. Esto es Zara Huella, un espacio donde los recuerdos encuentran una forma de permanecer. Porque hay personas que nos marcan, momentos que nos emocionan y palabras que nunca queremos olvidar. Una fragancia puede acompañarte por un instante, pero una huella puede quedarse para siempre. Zara Huella. Una fragancia, una historia, una huella que permanece.";
 
   if (!("speechSynthesis" in window)) {
     alert("Tu navegador no admite reproducción de voz.");
     return;
   }
 
-  speechSynthesis.cancel();
+  window.speechSynthesis.cancel();
 
-  const voz = new SpeechSynthesisUtterance(mensaje);
-  voz.lang = "es-AR";
-  voz.rate = 0.90;
-  voz.pitch = 1.08;
-  voz.volume = 1;
+  const texto =
+    "Hola, qué lindo que estés acá. " +
+    "Esto es Zara Huella, un espacio donde los recuerdos " +
+    "encuentran una forma de permanecer. " +
+    "Porque hay personas que nos marcan, momentos que nos emocionan " +
+    "y palabras que nunca queremos olvidar. " +
+    "Una fragancia puede acompañarte por un instante, " +
+    "pero una huella puede quedarse para siempre. " +
+    "Zara Huella. Una fragancia, una historia, " +
+    "una huella que permanece.";
 
-  const disponibles = speechSynthesis.getVoices();
-  const argentina = disponibles.find(v => v.lang.toLowerCase() === "es-ar");
-
-  if (argentina) {
-    voz.voice = argentina;
-  }
-
-  speechSynthesis.speak(voz);
-}
-
-function detenerVoz() {
-  speechSynthesis.cancel();
-}
-
-
-  audio.play().catch(hablar);
-}
-
-
-function hablar() {
-  if (!("speechSynthesis" in window)) {
-    alert("Este navegador no admite reproducción de voz.");
-    return;
-  }
-
-  speechSynthesis.cancel();
-
-  const mensaje = new SpeechSynthesisUtterance(
-    "Hola, qué lindo que estés acá. Esto es Zara Huella, un espacio donde los recuerdos encuentran una forma de permanecer. Porque hay personas que nos marcan, momentos que nos emocionan y palabras que nunca queremos olvidar. Una fragancia puede acompañarte por un instante, pero una huella puede quedarse para siempre. Zara Huella. Una fragancia, una historia, una huella que permanece."
-  );
+  const mensaje = new SpeechSynthesisUtterance(texto);
 
   mensaje.lang = "es-AR";
-  mensaje.rate = 0.88;
+  mensaje.rate = 0.90;
   mensaje.pitch = 1.08;
+  mensaje.volume = 1;
 
-  const voces = speechSynthesis.getVoices();
+  const voces = window.speechSynthesis.getVoices();
+
   const vozArgentina = voces.find(
     voz => voz.lang.toLowerCase() === "es-ar"
   );
 
+  const vozEspanol = voces.find(
+    voz => voz.lang.toLowerCase().startsWith("es")
+  );
+
   if (vozArgentina) {
     mensaje.voice = vozArgentina;
+  } else if (vozEspanol) {
+    mensaje.voice = vozEspanol;
   }
 
-  speechSynthesis.speak(mensaje);
+  window.speechSynthesis.speak(mensaje);
 }
 
-  speechSynthesis.cancel();
-  const mensaje = new SpeechSynthesisUtterance(
-    "Bienvenido a Zara Huella. Una fragancia, una historia, una huella que permanece. Hay momentos que pasan, emociones que nos transforman y recuerdos que merecen vivir para siempre."
-  );
-  mensaje.lang = "es-AR";
-  mensaje.rate = 0.88;
-  mensaje.pitch = 1;
-  speechSynthesis.speak(mensaje);
-}
+// DETENER LA VOZ
 
 function detenerVoz() {
-  speechSynthesis.cancel();
-  document.getElementById("audio").pause();
+  window.speechSynthesis.cancel();
 }
 
-document.getElementById("videoReal").addEventListener("canplay", function() {
+// MOSTRAR VIDEO CUANDO ESTÉ DISPONIBLE
+
+const video = document.getElementById("videoReal");
+
+video.addEventListener("canplay", function() {
   this.hidden = false;
   document.getElementById("videoDemo").hidden = true;
 });
 
-document.getElementById("fotoReal").addEventListener("load", function() {
+// MOSTRAR FOTOGRAFÍA CUANDO ESTÉ DISPONIBLE
+
+const foto = document.getElementById("fotoReal");
+
+foto.addEventListener("load", function() {
   this.hidden = false;
   document.getElementById("fotoDemo").hidden = true;
 });
 
-document.getElementById("fotoReal").addEventListener("error", function() {
+foto.addEventListener("error", function() {
   this.hidden = true;
 });
+
 </script>
+
 </body>
 </html>
