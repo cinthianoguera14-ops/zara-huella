@@ -238,13 +238,38 @@ footer {
 </footer>
 
 <script>
-function escucharVoz() {
-  const audio = document.getElementById("audio");
 
-  if (audio.error) {
-    hablar();
+function escucharVoz() {
+  const mensaje =
+    "Hola, qué lindo que estés acá. Esto es Zara Huella, un espacio donde los recuerdos encuentran una forma de permanecer. Porque hay personas que nos marcan, momentos que nos emocionan y palabras que nunca queremos olvidar. Una fragancia puede acompañarte por un instante, pero una huella puede quedarse para siempre. Zara Huella. Una fragancia, una historia, una huella que permanece.";
+
+  if (!("speechSynthesis" in window)) {
+    alert("Tu navegador no admite reproducción de voz.");
     return;
   }
+
+  speechSynthesis.cancel();
+
+  const voz = new SpeechSynthesisUtterance(mensaje);
+  voz.lang = "es-AR";
+  voz.rate = 0.90;
+  voz.pitch = 1.08;
+  voz.volume = 1;
+
+  const disponibles = speechSynthesis.getVoices();
+  const argentina = disponibles.find(v => v.lang.toLowerCase() === "es-ar");
+
+  if (argentina) {
+    voz.voice = argentina;
+  }
+
+  speechSynthesis.speak(voz);
+}
+
+function detenerVoz() {
+  speechSynthesis.cancel();
+}
+
 
   audio.play().catch(hablar);
 }
