@@ -501,6 +501,94 @@ if (memoria && token) {
     document.body.appendChild(seccion);
 
     const lista = seccion.querySelector("#listaRecuerdos");
+    
+// FORMULARIO PARA AGREGAR RECUERDOS
+const formulario = document.createElement("form");
+
+formulario.style.cssText = `
+  max-width: 550px;
+  margin: 25px auto;
+  padding: 20px;
+  background: #fff8f5;
+  border: 1px solid #d9bd8b;
+  border-radius: 15px;
+`;
+
+formulario.innerHTML = `
+  <h3 style="color:#9b6576;">Dejá tu huella ❤️</h3>
+  <p>Compartí una foto, un video, un audio o un mensaje.</p>
+
+  <input
+    type="file"
+    name="archivo"
+    accept="image/*,video/*,audio/*"
+    style="display:block;width:100%;margin:15px 0;"
+  >
+
+  <textarea
+    name="mensaje"
+    placeholder="Escribí tu recuerdo o dedicatoria..."
+    rows="3"
+    style="width:100%;padding:12px;border:1px solid #d9bd8b;border-radius:10px;"
+  ></textarea>
+
+  <button type="submit">♡ Guardar mi recuerdo</button>
+  <p id="estadoSubida" role="status"></p>
+`;
+
+seccion.appendChild(formulario);
+
+formulario.addEventListener("submit", async (evento) => {
+  evento.preventDefault();
+
+  const archivo = formulario.querySelector('input[type="file"]').files[0];
+  const mensaje = formulario.querySelector('[name="mensaje"]').value;
+  const estado = formulario.querySelector("#estadoSubida");
+
+  if (!archivo && !mensaje.trim()) {
+    estado.textContent = "Elegí un archivo o escribí un mensaje.";
+    return;
+  }
+
+  const datosFormulario = new FormData();
+  datosFormulario.append("memoria", memoria);
+  datosFormulario.append("token", token);
+  datosFormulario.append("autor", "quien_recibe");
+  datosFormulario.append("mensaje", mensaje);
+
+  if (archivo) {
+    datosFormulario.append("archivo", archivo);
+  }
+
+  estado.textContent = "Guardando tu recuerdo...";
+
+  try {
+    const respuesta = await fetch(
+      SUPABASE_URL + "/functions/v1/subir-recuerdo",
+      {
+        method: "POST",
+        headers: {
+          "apikey": SUPABASE_PUBLISHABLE_KEY
+        },
+        body: datosFormulario
+      }
+    );
+
+    const resultado = await respuesta.json();
+
+    if (!respuesta.ok || resultado.ok === false) {
+      throw new Error(resultado.error || "No se pudo guardar.");
+    }
+
+    estado.textContent = "¡Tu recuerdo quedó guardado! ❤️";
+    setTimeout(() => window.location.reload(), 1200);
+
+  } catch (error) {
+    console.error("Error al guardar:", error);
+    estado.textContent = "No pudimos guardar el recuerdo. Intentá nuevamente.";
+  }
+});
+
 
     try {
       const respuesta = await fetch(
