@@ -441,3 +441,536 @@ small { color: #806d5d; }
   <div class="linea"></div>
   <p>Gracias por formar parte de esta historia.</p>
 </section>
+<section class="card" id="crear-memoria">
+  <div class="icono" aria-hidden="true">♡</div>
+  <h2>Creá una memoria especial</h2>
+
+  <p>
+    Cada perfume guarda una historia.
+    Personalizá esta experiencia para alguien especial.
+  </p>
+
+  <form id="formCrearMemoria">
+    <label for="nombreRemitente">Tu nombre</label>
+    <input id="nombreRemitente" type="text"
+      placeholder="¿Quién regala el perfume?"
+      required maxlength="80">
+
+    <label for="nombreDestinatario">Nombre de quien lo recibe</label>
+    <input id="nombreDestinatario" type="text"
+      placeholder="¿Para quién es?"
+      required maxlength="80">
+
+    <label for="dedicatoria">Tu dedicatoria</label>
+    <textarea id="dedicatoria" rows="4"
+      placeholder="Escribí unas palabras especiales..."
+      required maxlength="1000"></textarea>
+
+    <button type="submit" id="btnCrearMemoria">
+      ♡ Crear mi memoria
+    </button>
+  </form>
+
+  <p id="estadoCrearMemoria" role="status" aria-live="polite"></p>
+
+  <div id="resultadoMemoria" hidden>
+    <h2>¡Tu memoria está creada!</h2>
+    <p>Este es el QR único para compartir tu historia.</p>
+    <div id="codigoQR"></div>
+    <button type="button" id="btnDescargarQR">
+      Descargar mi QR
+    </button>
+    <p><small>Conservá este código: es la llave de tu memoria.</small></p>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="flor" aria-hidden="true">✿</div>
+  ZARA HUELLA · EAU DE PARFUM
+  <p>Una fragancia, una historia, una huella.</p>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+<script>
+const audioVoz = document.getElementById("vozReal");
+const estadoAudio = document.getElementById("estadoAudio");
+
+document.getElementById("btnEscuchar").addEventListener("click", async () => {
+  try {
+    audioVoz.currentTime = 0;
+    await audioVoz.play();
+    estadoAudio.textContent = "Reproduciendo tu mensaje.";
+  } catch (error) {
+    console.error("No se pudo reproducir el audio:", error);
+    estadoAudio.textContent =
+      "No se pudo reproducir el audio. Verificá que voz.mp3 esté subido junto a index.html.";
+  }
+});
+
+document.getElementById("btnDetener").addEventListener("click", () => {
+  audioVoz.pause();
+  audioVoz.currentTime = 0;
+  estadoAudio.textContent = "Mensaje detenido.";
+});
+
+const video = document.getElementById("videoReal");
+const videoDemo = document.getElementById("videoDemo");
+
+video.addEventListener("loadedmetadata", () => {
+  video.hidden = false;
+  videoDemo.hidden = true;
+});
+
+video.addEventListener("error", () => {
+  video.hidden = true;
+  videoDemo.hidden = false;
+});
+
+const foto = document.getElementById("fotoReal");
+
+foto.addEventListener("load", () => {
+  foto.hidden = false;
+  document.getElementById("fotoDemo").hidden = true;
+});
+
+foto.addEventListener("error", () => {
+  foto.hidden = true;
+  document.getElementById("fotoDemo").hidden = false;
+});
+
+// MOSTRAR EL COLLAGE
+
+const collageReal = document.getElementById("collageReal");
+const collageDemo = document.getElementById("collageDemo");
+
+collageReal.addEventListener("load", () => {
+  collageReal.hidden = false;
+  collageDemo.hidden = true;
+});
+
+collageReal.addEventListener("error", () => {
+  collageReal.hidden = true;
+  collageDemo.hidden = false;
+});
+
+// CONEXIÓN DE ZARA HUELLA CON SUPABASE
+
+const SUPABASE_URL = "https://scnocxmmwijimvdgfoni.supabase.co";
+
+const SUPABASE_PUBLISHABLE_KEY =
+  "sb_publishable_0jXYH-ddU9zsoZpzMXYMIg_gyd1300Z";
+
+// CREAR MEMORIA Y GENERAR SU QR ÚNICO
+
+document.getElementById("formCrearMemoria").addEventListener("submit", async (evento) => {
+  evento.preventDefault();
+
+  const boton = document.getElementById("btnCrearMemoria");
+  const estado = document.getElementById("estadoCrearMemoria");
+  const resultado = document.getElementById("resultadoMemoria");
+  const codigoQR = document.getElementById("codigoQR");
+
+  const nombre_remitente =
+    document.getElementById("nombreRemitente").value.trim();
+
+  const nombre_destinatario =
+    document.getElementById("nombreDestinatario").value.trim();
+
+  const dedicatoria =
+    document.getElementById("dedicatoria").value.trim();
+
+  if (!nombre_remitente || !nombre_destinatario) {
+    estado.textContent = "Completá ambos nombres.";
+    return;
+  }
+
+  boton.disabled = true;
+  boton.textContent = "Creando tu memoria...";
+  estado.textContent = "Estamos preparando tu recuerdo ❤️";
+  resultado.hidden = true;
+
+  try {
+    const respuesta = await fetch(
+      SUPABASE_URL + "/functions/v1/crear-memoria",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "apikey": SUPABASE_PUBLISHABLE_KEY
+        },
+        body: JSON.stringify({
+          nombre_remitente,
+          nombre_destinatario,
+          dedicatoria
+        })
+      }
+    );
+
+    const datos = await respuesta.json();
+
+    if (!respuesta.ok || !datos.ok || !datos.urlMemoria) {
+      throw new Error(datos.error || "No se pudo crear la memoria.");
+    }
+
+    codigoQR.innerHTML = "";
+
+    if (typeof QRCode === "undefined") {
+      throw new Error(
+        "No se pudo cargar el generador de QR. Revisá tu conexión e intentá nuevamente."
+      );
+    }
+
+    new QRCode(codigoQR, {
+      text: datos.urlMemoria,
+      width: 280,
+      height: 280,
+      correctLevel: QRCode.CorrectLevel.H
+    });
+
+    resultado.hidden = false;
+    estado.textContent = "¡Tu memoria se creó correctamente! ❤️";
+
+  } catch (error) {
+    console.error("Error al crear memoria:", error);
+    estado.textContent = "Error: " + error.message;
+
+  } finally {
+    boton.disabled = false;
+    boton.textContent = "♡ Crear mi memoria";
+  }
+});
+
+// DESCARGAR EL QR
+
+document.getElementById("btnDescargarQR").addEventListener("click", () => {
+  const canvas = document.querySelector("#codigoQR canvas");
+  const imagen = document.querySelector("#codigoQR img");
+  const enlace = document.createElement("a");
+
+  if (canvas) {
+    enlace.href = canvas.toDataURL("image/png");
+
+  } else if (imagen) {
+    enlace.href = imagen.src;
+
+  } else {
+    alert("Primero tenés que crear tu memoria.");
+    return;
+  }
+
+  enlace.download = "ZARA-HUELLA-mi-memoria.png";
+  enlace.click();
+});
+
+// RECUPERAR MEMORIA MEDIANTE EL QR
+
+const parametros = new URLSearchParams(window.location.search);
+const memoria = parametros.get("memoria");
+const token = parametros.get("token");
+  if (memoria && token) {
+
+  const panelMemoria = document.createElement("section");
+
+  panelMemoria.style.cssText = `
+    max-width: 650px;
+    margin: 30px auto;
+    padding: 28px;
+    text-align: center;
+    background: rgba(255,255,255,0.94);
+    border: 1px solid #d8b575;
+    border-radius: 18px;
+    color: #8b6555;
+    font-family: Georgia, serif;
+  `;
+
+  panelMemoria.innerHTML = `
+    <h2>Una huella que permanece ❤️</h2>
+    <p id="estadoMemoria">Estamos preparando tu recuerdo...</p>
+    <h3 id="saludoMemoria"></h3>
+    <p id="dedicatoriaMemoria"></p>
+  `;
+
+  document.body.prepend(panelMemoria);
+
+  // CONSULTAR LOS DATOS DE LA MEMORIA
+
+  async function cargarMemoria() {
+    try {
+      const respuesta = await fetch(
+        SUPABASE_URL + "/functions/v1/consultar-memoria",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "apikey": SUPABASE_PUBLISHABLE_KEY
+          },
+          body: JSON.stringify({ memoria, token })
+        }
+      );
+
+      const datos = await respuesta.json();
+
+      if (!respuesta.ok || !datos.ok) {
+        throw new Error("No se pudo encontrar esta memoria.");
+      }
+
+      document.getElementById("estadoMemoria").textContent =
+        "Esta huella fue creada con cariño para:";
+
+      document.getElementById("saludoMemoria").textContent =
+        datos.nombre_destinatario;
+
+      document.getElementById("dedicatoriaMemoria").textContent =
+        datos.nombre_remitente + " te dejó este mensaje: " +
+        datos.dedicatoria;
+
+    } catch (error) {
+      console.error("Error al consultar memoria:", error);
+
+      document.getElementById("estadoMemoria").textContent =
+        "No pudimos cargar este recuerdo. Revisá el enlace e intentá nuevamente.";
+    }
+  }
+
+  // MOSTRAR Y COMPARTIR FOTOS, VIDEOS Y AUDIOS
+
+  async function cargarRecuerdos() {
+
+    const seccion = document.createElement("section");
+
+    seccion.style.cssText = `
+      max-width: 760px;
+      margin: 25px auto;
+      padding: 24px;
+      background: #fffaf8;
+      border-radius: 18px;
+      text-align: center;
+    `;
+
+    seccion.innerHTML = `
+      <h2 style="color:#9b6576;">Nuestros recuerdos ❤️</h2>
+      <p>Imágenes, voces y momentos que dejan huella.</p>
+      <div id="listaRecuerdos">Buscando recuerdos...</div>
+    `;
+
+    document.body.appendChild(seccion);
+
+    const lista = seccion.querySelector("#listaRecuerdos");
+
+    // FORMULARIO PARA AGREGAR RECUERDOS
+
+    const formulario = document.createElement("form");
+
+    formulario.style.cssText = `
+      max-width: 550px;
+      margin: 25px auto;
+      padding: 20px;
+      background: #fff8f5;
+      border: 1px solid #d9bd8b;
+      border-radius: 15px;
+    `;
+
+    formulario.innerHTML = `
+      <h3 style="color:#9b6576;">Dejá tu huella ❤️</h3>
+      <p>Compartí una foto, un video, un audio o un mensaje.</p>
+
+      <input
+        type="file"
+        name="archivo"
+        accept="image/*,video/*,audio/*"
+        style="display:block;width:100%;margin:15px 0;"
+      >
+
+      <textarea
+        name="mensaje"
+        placeholder="Escribí tu recuerdo o dedicatoria..."
+        rows="3"
+        style="width:100%;padding:12px;border:1px solid #d9bd8b;border-radius:10px;"
+      ></textarea>
+
+      <button type="submit">♡ Guardar mi recuerdo</button>
+      <p id="estadoSubida" role="status"></p>
+    `;
+
+    seccion.appendChild(formulario);
+
+    formulario.addEventListener("submit", async (evento) => {
+      evento.preventDefault();
+
+      const archivo =
+        formulario.querySelector('input[type="file"]').files[0];
+
+      const mensaje =
+        formulario.querySelector('[name="mensaje"]').value;
+
+      const estado =
+        formulario.querySelector("#estadoSubida");
+
+      if (!archivo && !mensaje.trim()) {
+        estado.textContent =
+          "Elegí un archivo o escribí un mensaje.";
+        return;
+      }
+
+      const datosFormulario = new FormData();
+
+      datosFormulario.append("memoria", memoria);
+      datosFormulario.append("token", token);
+      datosFormulario.append("autor", "quien_recibe");
+      datosFormulario.append("mensaje", mensaje);
+
+      if (archivo) {
+        datosFormulario.append("archivo", archivo);
+      }
+
+      estado.textContent = "Guardando tu recuerdo...";
+
+      try {
+        const respuesta = await fetch(
+          SUPABASE_URL + "/functions/v1/subir-recuerdo",
+          {
+            method: "POST",
+            headers: {
+              "apikey": SUPABASE_PUBLISHABLE_KEY
+            },
+            body: datosFormulario
+          }
+        );
+
+        const resultado = await respuesta.json();
+
+        if (!respuesta.ok || resultado.ok === false) {
+          throw new Error(
+            resultado.error || "No se pudo guardar."
+          );
+        }
+
+        estado.textContent =
+          "¡Tu recuerdo quedó guardado! ❤️";
+
+        setTimeout(() => window.location.reload(), 1200);
+
+      } catch (error) {
+        console.error("Error al guardar:", error);
+        estado.textContent = "Error: " + error.message;
+      }
+    });
+
+    // RECUPERAR LOS RECUERDOS GUARDADOS
+
+    try {
+      const respuesta = await fetch(
+        SUPABASE_URL + "/functions/v1/ver-recuerdos",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "apikey": SUPABASE_PUBLISHABLE_KEY
+          },
+          body: JSON.stringify({ memoria, token })
+        }
+      );
+
+      const datos = await respuesta.json();
+
+      if (!respuesta.ok || !datos.ok) {
+        throw new Error("No se pudieron recuperar los recuerdos.");
+      }
+
+      lista.innerHTML = "";
+
+      if (!datos.recuerdos || datos.recuerdos.length === 0) {
+        lista.textContent =
+          "Todavía no hay recuerdos cargados.";
+        return;
+      }
+
+      datos.recuerdos.forEach((recuerdo) => {
+
+        const tarjeta = document.createElement("div");
+
+        tarjeta.style.cssText = `
+          margin: 20px auto;
+          padding: 15px;
+          background: white;
+          border-radius: 14px;
+          max-width: 600px;
+        `;
+
+        if (recuerdo.tipo === "foto") {
+
+          const imagen = document.createElement("img");
+
+          imagen.src = recuerdo.url;
+          imagen.alt = "Recuerdo compartido";
+
+          imagen.style.cssText =
+            "width:100%;max-height:420px;object-fit:contain;border-radius:12px;";
+
+          tarjeta.appendChild(imagen);
+
+        } else if (recuerdo.tipo === "video") {
+
+          const video = document.createElement("video");
+
+          video.src = recuerdo.url;
+          video.controls = true;
+          video.playsInline = true;
+
+          video.style.cssText =
+            "width:100%;border-radius:12px;";
+
+          tarjeta.appendChild(video);
+
+        } else if (recuerdo.tipo === "audio") {
+
+          const audio = document.createElement("audio");
+
+          audio.src = recuerdo.url;
+          audio.controls = true;
+          audio.style.width = "100%";
+
+          tarjeta.appendChild(audio);
+        }
+
+        if (recuerdo.mensaje) {
+
+          const mensaje = document.createElement("p");
+
+          mensaje.textContent = recuerdo.mensaje;
+
+          tarjeta.appendChild(mensaje);
+        }
+
+        if (recuerdo.autor) {
+
+          const autor = document.createElement("small");
+
+          autor.textContent =
+            "Compartido por " + recuerdo.autor;
+
+          tarjeta.appendChild(autor);
+        }
+
+        lista.appendChild(tarjeta);
+      });
+
+    } catch (error) {
+      console.error("Error al recuperar recuerdos:", error);
+
+      lista.textContent =
+        "No se pudieron cargar los recuerdos. Intentá actualizar la página.";
+    }
+  }
+
+  cargarRecuerdos();
+  cargarMemoria();
+}
+
+</script>
+
+</body>
+</html>
