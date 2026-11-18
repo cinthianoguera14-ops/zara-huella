@@ -140,6 +140,30 @@ button:focus-visible {
   outline-offset: 3px;
 }
 
+/* BOTÓN DEJÁ TU HUELLA */
+.boton-huella {
+  display: inline-block;
+  border: 1px solid var(--dorado);
+  background: #fffaf7;
+  color: #775c35;
+  border-radius: 30px;
+  padding: 13px 25px;
+  font-family: Georgia, serif;
+  font-size: 15px;
+  text-decoration: none;
+  margin: 10px;
+  transition: background .2s ease;
+}
+
+.boton-huella:hover {
+  background: var(--rosa);
+}
+
+.boton-huella:focus-visible {
+  outline: 3px solid var(--dorado);
+  outline-offset: 3px;
+}
+
 .media {
   width: 100%;
   max-height: 380px;
@@ -310,6 +334,28 @@ small { color: #806d5d; }
   <p>Gracias por formar parte de esta historia.</p>
 </section>
 
+<!-- NUEVA SECCIÓN PARA COMPARTIR RECUERDOS -->
+<section class="card" id="dejar-huella">
+  <div class="icono" aria-hidden="true">♡</div>
+  <h2>Dejá tu huella</h2>
+
+  <p>
+    Cada historia merece ser recordada.
+    Compartí una foto, un mensaje o un momento especial.
+  </p>
+
+  <a
+    href="https://docs.google.com/forms/d/e/1FAIpQLScGV0yztuTMScrOWV3cXJXtzEG8SFWlKI25ptfgqN-cOvQjVg/viewform?usp=sharing"
+    target="_blank"
+    rel="noopener noreferrer"
+    class="boton-huella"
+  >
+    ♡ Compartir un recuerdo
+  </a>
+
+  <p><small>Porque cada recuerdo deja una huella.</small></p>
+</section>
+
 </main>
 
 <footer>
@@ -363,11 +409,11 @@ foto.addEventListener("error", () => {
   foto.hidden = true;
   document.getElementById("fotoDemo").hidden = false;
 });
-  
+
 // CONEXIÓN DE ZARA HUELLA CON SUPABASE
 
 const SUPABASE_URL = "https://scnocxmmwijimvdgfoni.supabase.co";
-const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_0jXYH-ddU9zsoZpzMXYMIg_gyd1300Z ";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_0jXYH-ddU9zsoZpzMXYMIg_gyd1300Z";
 
 const parametros = new URLSearchParams(window.location.search);
 const memoria = parametros.get("memoria");
@@ -433,114 +479,114 @@ if (memoria && token) {
     }
   }
 
-// MOSTRAR FOTOS, VIDEOS Y AUDIOS DE LA MEMORIA
-async function cargarRecuerdos() {
-  const seccion = document.createElement("section");
-  seccion.style.cssText = `
-    max-width: 760px;
-    margin: 25px auto;
-    padding: 24px;
-    background: #fffaf8;
-    border-radius: 18px;
-    text-align: center;
-  `;
+  // MOSTRAR FOTOS, VIDEOS Y AUDIOS DE LA MEMORIA
+  async function cargarRecuerdos() {
+    const seccion = document.createElement("section");
 
-  seccion.innerHTML = `
-    <h2 style="color:#9b6576;">Nuestros recuerdos ❤️</h2>
-    <p>Imágenes, voces y momentos que dejan huella.</p>
-    <div id="listaRecuerdos">Buscando recuerdos...</div>
-  `;
+    seccion.style.cssText = `
+      max-width: 760px;
+      margin: 25px auto;
+      padding: 24px;
+      background: #fffaf8;
+      border-radius: 18px;
+      text-align: center;
+    `;
 
-  document.body.appendChild(seccion);
+    seccion.innerHTML = `
+      <h2 style="color:#9b6576;">Nuestros recuerdos ❤️</h2>
+      <p>Imágenes, voces y momentos que dejan huella.</p>
+      <div id="listaRecuerdos">Buscando recuerdos...</div>
+    `;
 
-  const lista = seccion.querySelector("#listaRecuerdos");
+    document.body.appendChild(seccion);
 
-  try {
-    const respuesta = await fetch(
-      SUPABASE_URL + "/functions/v1/ver-recuerdos",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "apikey": SUPABASE_PUBLISHABLE_KEY
-        },
-        body: JSON.stringify({ memoria, token })
+    const lista = seccion.querySelector("#listaRecuerdos");
+
+    try {
+      const respuesta = await fetch(
+        SUPABASE_URL + "/functions/v1/ver-recuerdos",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "apikey": SUPABASE_PUBLISHABLE_KEY
+          },
+          body: JSON.stringify({ memoria, token })
+        }
+      );
+
+      const datos = await respuesta.json();
+
+      if (!respuesta.ok || !datos.ok) {
+        throw new Error("No se pudieron recuperar los recuerdos.");
       }
-    );
 
-    const datos = await respuesta.json();
+      lista.innerHTML = "";
 
-    if (!respuesta.ok || !datos.ok) {
-      throw new Error("No se pudieron recuperar los recuerdos.");
+      if (!datos.recuerdos || datos.recuerdos.length === 0) {
+        lista.textContent = "Todavía no hay recuerdos cargados.";
+        return;
+      }
+
+      datos.recuerdos.forEach((recuerdo) => {
+        const tarjeta = document.createElement("div");
+
+        tarjeta.style.cssText = `
+          margin: 20px auto;
+          padding: 15px;
+          background: white;
+          border-radius: 14px;
+          max-width: 600px;
+        `;
+
+        if (recuerdo.tipo === "foto") {
+          const imagen = document.createElement("img");
+          imagen.src = recuerdo.url;
+          imagen.alt = "Recuerdo compartido";
+          imagen.style.cssText =
+            "width:100%;max-height:420px;object-fit:contain;border-radius:12px;";
+          tarjeta.appendChild(imagen);
+
+        } else if (recuerdo.tipo === "video") {
+          const video = document.createElement("video");
+          video.src = recuerdo.url;
+          video.controls = true;
+          video.playsInline = true;
+          video.style.cssText = "width:100%;border-radius:12px;";
+          tarjeta.appendChild(video);
+
+        } else if (recuerdo.tipo === "audio") {
+          const audio = document.createElement("audio");
+          audio.src = recuerdo.url;
+          audio.controls = true;
+          audio.style.width = "100%";
+          tarjeta.appendChild(audio);
+        }
+
+        if (recuerdo.mensaje) {
+          const mensaje = document.createElement("p");
+          mensaje.textContent = recuerdo.mensaje;
+          tarjeta.appendChild(mensaje);
+        }
+
+        if (recuerdo.autor) {
+          const autor = document.createElement("small");
+          autor.textContent = "Compartido por " + recuerdo.autor;
+          tarjeta.appendChild(autor);
+        }
+
+        lista.appendChild(tarjeta);
+      });
+
+    } catch (error) {
+      lista.textContent = "No pudimos cargar los recuerdos. Intentá nuevamente.";
+      console.error(error);
     }
-
-    lista.innerHTML = "";
-
-    if (!datos.recuerdos || datos.recuerdos.length === 0) {
-      lista.textContent = "Todavía no hay recuerdos cargados.";
-      return;
-    }
-
-    datos.recuerdos.forEach((recuerdo) => {
-      const tarjeta = document.createElement("div");
-      tarjeta.style.cssText = `
-        margin: 20px auto;
-        padding: 15px;
-        background: white;
-        border-radius: 14px;
-        max-width: 600px;
-      `;
-
-      if (recuerdo.tipo === "foto") {
-        const imagen = document.createElement("img");
-        imagen.src = recuerdo.url;
-        imagen.alt = "Recuerdo compartido";
-        imagen.style.cssText =
-          "width:100%;max-height:420px;object-fit:contain;border-radius:12px;";
-        tarjeta.appendChild(imagen);
-
-      } else if (recuerdo.tipo === "video") {
-        const video = document.createElement("video");
-        video.src = recuerdo.url;
-        video.controls = true;
-        video.playsInline = true;
-        video.style.cssText = "width:100%;border-radius:12px;";
-        tarjeta.appendChild(video);
-
-      } else if (recuerdo.tipo === "audio") {
-        const audio = document.createElement("audio");
-        audio.src = recuerdo.url;
-        audio.controls = true;
-        audio.style.width = "100%";
-        tarjeta.appendChild(audio);
-      }
-
-      if (recuerdo.mensaje) {
-        const mensaje = document.createElement("p");
-        mensaje.textContent = recuerdo.mensaje;
-        tarjeta.appendChild(mensaje);
-      }
-
-      if (recuerdo.autor) {
-        const autor = document.createElement("small");
-        autor.textContent = "Compartido por " + recuerdo.autor;
-        tarjeta.appendChild(autor);
-      }
-
-      lista.appendChild(tarjeta);
-    });
-
-  } catch (error) {
-    lista.textContent = "No pudimos cargar los recuerdos. Intentá nuevamente.";
-    console.error(error);
   }
-}
 
-cargarRecuerdos();
-
+  cargarRecuerdos();
   cargarMemoria();
 }
-
 </script>
 
 </body>
