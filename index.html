@@ -666,10 +666,10 @@ formulario.addEventListener("submit", async (evento) => {
         lista.appendChild(tarjeta);
       });
 
-    } catch (error) {
-      lista.textContent = "No pudimos cargar los recuerdos. Intentá nuevamente.";
-      console.error(error);
-    }
+   } catch (error) {
+  console.error("Error al guardar:", error);
+  estado.textContent = "Error: " + error.message;
+}
   }
 
   cargarRecuerdos();
