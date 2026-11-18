@@ -335,26 +335,50 @@ small { color: #806d5d; }
 </section>
 
 <!-- NUEVA SECCIÓN PARA COMPARTIR RECUERDOS -->
-<section class="card" id="dejar-huella">
+
+<section class="card" id="crear-memoria">
   <div class="icono" aria-hidden="true">♡</div>
-  <h2>Dejá tu huella</h2>
+  <h2>Creá una memoria especial</h2>
 
   <p>
-    Cada historia merece ser recordada.
-    Compartí una foto, un mensaje o un momento especial.
+    Cada perfume guarda una historia.
+    Personalizá esta experiencia para alguien especial.
   </p>
 
-  <a
-    href="https://docs.google.com/forms/d/e/1FAIpQLScGV0yztuTMScrOWV3cXJXtzEG8SFWlKI25ptfgqN-cOvQjVg/viewform?usp=sharing"
-    target="_blank"
-    rel="noopener noreferrer"
-    class="boton-huella"
-  >
-    ♡ Compartir un recuerdo
-  </a>
+  <form id="formCrearMemoria">
+    <label for="nombreRemitente">Tu nombre</label>
+    <input id="nombreRemitente" type="text"
+      placeholder="¿Quién regala el perfume?"
+      required maxlength="80">
 
-  <p><small>Porque cada recuerdo deja una huella.</small></p>
+    <label for="nombreDestinatario">Nombre de quien lo recibe</label>
+    <input id="nombreDestinatario" type="text"
+      placeholder="¿Para quién es?"
+      required maxlength="80">
+
+    <label for="dedicatoria">Tu dedicatoria</label>
+    <textarea id="dedicatoria" rows="4"
+      placeholder="Escribí unas palabras especiales..."
+      required maxlength="1000"></textarea>
+
+    <button type="submit" id="btnCrearMemoria">
+      ♡ Crear mi memoria
+    </button>
+  </form>
+
+  <p id="estadoCrearMemoria" role="status" aria-live="polite"></p>
+
+  <div id="resultadoMemoria" hidden>
+    <h2>¡Tu memoria está creada!</h2>
+    <p>Este es el QR único para compartir tu historia.</p>
+    <div id="codigoQR"></div>
+    <button type="button" id="btnDescargarQR">
+      Descargar mi QR
+    </button>
+    <p><small>Conservá este código: es la llave de tu memoria.</small></p>
+  </div>
 </section>
+
 
 </main>
 
@@ -363,7 +387,7 @@ small { color: #806d5d; }
   ZARA HUELLA · EAU DE PARFUM
   <p>Una fragancia, una historia, una huella.</p>
 </footer>
-
+<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.4/build/qrcode.min.js"></script>
 <script>
 const audioVoz = document.getElementById("vozReal");
 const estadoAudio = document.getElementById("estadoAudio");
@@ -414,6 +438,92 @@ foto.addEventListener("error", () => {
 
 const SUPABASE_URL = "https://scnocxmmwijimvdgfoni.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_0jXYH-ddU9zsoZpzMXYMIg_gyd1300Z";
+  // CREAR MEMORIA Y GENERAR SU QR ÚNICO
+
+let qrGenerado = "";
+
+document.getElementById("formCrearMemoria").addEventListener("submit", async (evento) => {
+  evento.preventDefault();
+
+  const boton = document.getElementById("btnCrearMemoria");
+  const estado = document.getElementById("estadoCrearMemoria");
+  const resultado = document.getElementById("resultadoMemoria");
+  const codigoQR = document.getElementById("codigoQR");
+
+  const nombre_remitente = document.getElementById("nombreRemitente").value.trim();
+  const nombre_destinatario = document.getElementById("nombreDestinatario").value.trim();
+  const dedicatoria = document.getElementById("dedicatoria").value.trim();
+
+  if (!nombre_remitente || !nombre_destinatario) {
+    estado.textContent = "Completá ambos nombres.";
+    return;
+  }
+
+  boton.disabled = true;
+  boton.textContent = "Creando tu memoria...";
+  estado.textContent = "Estamos preparando tu recuerdo ❤️";
+  resultado.hidden = true;
+
+  try {
+    const respuesta = await fetch(
+      SUPABASE_URL + "/functions/v1/crear-memoria",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "apikey": SUPABASE_PUBLISHABLE_KEY
+        },
+        body: JSON.stringify({
+          nombre_remitente,
+          nombre_destinatario,
+          dedicatoria
+        })
+      }
+    );
+
+    const datos = await respuesta.json();
+
+    if (!respuesta.ok || !datos.ok || !datos.urlMemoria) {
+      throw new Error(datos.error || "No se pudo crear la memoria.");
+    }
+
+    codigoQR.innerHTML = "";
+
+    qrGenerado = await QRCode.toDataURL(datos.urlMemoria, {
+      width: 280,
+      margin: 2,
+      errorCorrectionLevel: "H"
+    });
+
+    const imagenQR = document.createElement("img");
+    imagenQR.src = qrGenerado;
+    imagenQR.alt = "Código QR de tu memoria ZARA HUELLA";
+    imagenQR.style.cssText = "width:280px;max-width:100%;display:block;margin:15px auto;";
+
+    codigoQR.appendChild(imagenQR);
+
+    resultado.hidden = false;
+    estado.textContent = "¡Tu memoria se creó correctamente! ❤️";
+
+  } catch (error) {
+    console.error("Error al crear memoria:", error);
+    estado.textContent = "Error: " + error.message;
+  } finally {
+    boton.disabled = false;
+    boton.textContent = "♡ Crear mi memoria";
+  }
+});
+
+// DESCARGAR EL QR
+
+document.getElementById("btnDescargarQR").addEventListener("click", () => {
+  if (!qrGenerado) return;
+
+  const enlace = document.createElement("a");
+  enlace.href = qrGenerado;
+  enlace.download = "ZARA-HUELLA-mi-memoria.png";
+  enlace.click();
+});
 
 const parametros = new URLSearchParams(window.location.search);
 const memoria = parametros.get("memoria");
