@@ -363,6 +363,79 @@ foto.addEventListener("error", () => {
   foto.hidden = true;
   document.getElementById("fotoDemo").hidden = false;
 });
+  
+// CONEXIÓN DE ZARA HUELLA CON SUPABASE
+
+const SUPABASE_URL = "https://scnocxmmwijimvdgfoni.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_0jXYH-ddU9zsoZpzMXYMIg_gyd1300Z ";
+
+const parametros = new URLSearchParams(window.location.search);
+const memoria = parametros.get("memoria");
+const token = parametros.get("token");
+
+if (memoria && token) {
+  const panelMemoria = document.createElement("section");
+
+  panelMemoria.style.cssText = `
+    max-width: 650px;
+    margin: 30px auto;
+    padding: 28px;
+    text-align: center;
+    background: rgba(255,255,255,0.94);
+    border: 1px solid #d8b575;
+    border-radius: 18px;
+    color: #8b6555;
+    font-family: Georgia, serif;
+  `;
+
+  panelMemoria.innerHTML = `
+    <h2>Una huella que permanece ❤️</h2>
+    <p id="estadoMemoria">Estamos preparando tu recuerdo...</p>
+    <h3 id="saludoMemoria"></h3>
+    <p id="dedicatoriaMemoria"></p>
+  `;
+
+  document.body.prepend(panelMemoria);
+
+  async function cargarMemoria() {
+    try {
+      const respuesta = await fetch(
+        SUPABASE_URL + "/functions/v1/consultar-memoria",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "apikey": SUPABASE_PUBLISHABLE_KEY
+          },
+          body: JSON.stringify({ memoria, token })
+        }
+      );
+
+      const datos = await respuesta.json();
+
+      if (!respuesta.ok || !datos.ok) {
+        throw new Error("No se pudo encontrar esta memoria.");
+      }
+
+      document.getElementById("estadoMemoria").textContent =
+        "Esta huella fue creada con cariño para:";
+
+      document.getElementById("saludoMemoria").textContent =
+        datos.nombre_destinatario;
+
+      document.getElementById("dedicatoriaMemoria").textContent =
+        datos.nombre_remitente + " te dejó este mensaje: " +
+        datos.dedicatoria;
+
+    } catch (error) {
+      document.getElementById("estadoMemoria").textContent =
+        "No pudimos cargar este recuerdo. Revisá el enlace e intentá nuevamente.";
+    }
+  }
+
+  cargarMemoria();
+}
+
 </script>
 
 </body>
